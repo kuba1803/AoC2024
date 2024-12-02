@@ -20,7 +20,7 @@ for i in range(numElem):
     if errorLevelIdx == -1:
         numSafeRaport += 1
     else:
-        for j in range(max(errorLevelIdx - 2, 0), min((errorLevelIdx + 1), len(levels))):
+        for j in range(max(errorLevelIdx - 2, 0), errorLevelIdx + 1):
             cp_levels = levels.copy()
             del cp_levels[j]
             if valid(cp_levels) == -1:
