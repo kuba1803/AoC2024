@@ -1,15 +1,13 @@
 
 map = []
 mask = []
-maxX, maxY = 0, 0
 posX, posY = 0, 0
+sum = 0
 
-with open('input_example.txt') as f:
+with open('input.txt') as f:
     for line in f:
-        maxY +=1
-        maxX = max(maxX, len(line))
-        map.append(line.strip())
-        mask.append([0]*len(line))
+        map.append(list(line.strip()))
+        mask.append([0]*len(map[0]))
 
     for y in range(len(map)):
         for x in range(len(map[y])):
@@ -17,24 +15,62 @@ with open('input_example.txt') as f:
                 posX = x
                 posY = y
 
-    while posX <= maxX and posY <= maxY and posX >=0 and posY >= 0:
+    while posX <= len(map[0]) and posY < len(map) and posX >=0 and posY >= 0:
         mask[posY][posX] = 1;
-        print( "posX:", posX, "posY:", posY)
+        print( "posX:", posX, "posY:", posY, "dir:", map[posY][posX])
         if map[posY][posX] == '^':
-            posY-=1
+            map[posY][posX]='.'
+            if( posY <= 0 ):
+                break
+            elif (map[posY - 1][posX] == '#'):
+                map[posY][posX] = '>'
+            else:
+                posY-=1
+                map[posY][posX] = '^'
         elif map[posY][posX] == 'v':
-            posY+=1
+            map[posY][posX]='.'
+            if( posY + 1 >= len(map)):
+                break
+            elif( map[posY + 1][posX] == '#'):
+                map[posY][posX] = '<'
+            else:
+                posY+=1
+                map[posY][posX] = 'v'
         elif map[posY][posX] == '>':
-            posX+=1
+            map[posY][posX]='.'
+            if( posX + 1 >= len(map[0])):
+                break
+            elif( map[posY][posX+1] == '#'):
+                map[posY][posX] = 'v'
+            else:
+                posX+=1
+                map[posY][posX] = '>'
         elif map[posY][posX] == '<':
-            posX-=1
+            map[posY][posX]='.'
+            if( posX <= 0 ):
+                break
+            elif( map[posY][posX-1] == '#'):
+                map[posY][posX] = '^'
+            else:
+                posX-=1
+                map[posY][posX] = '<'
+        else:
+            break
 
-    for y in range(maxY):
-        for x in range(maxX):
+        for y in range(len(map)):
+            print(map[y])
+
+
+    for y in range(len(map)):
+        for x in range(len(map[0])):
             if mask[y][x] == 1 :
                 sum+=1
 
 
 print(sum)
-print(map)
-print(mask)
+for y in range(len(map)):
+    print(map[y])
+
+for y in range(len(mask)):
+    print(mask[y])
+
